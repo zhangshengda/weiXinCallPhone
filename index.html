@@ -2,713 +2,157 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>联系我们</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>联系车主</title>
     <style>
-        * {
+        /* --- 基础样式 --- */
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff; /* 纯白背景，更干净 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- 主容器 --- */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            padding: 20px;
             box-sizing: border-box;
         }
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        /* --- 顶部图标 --- */
+        .icon-header {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 20px;
+            color: #4A90E2; /* 一种更现代的蓝色 */
         }
         
-        .card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 25px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-            text-align: center;
-            max-width: 420px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-        
-        .avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: white;
-            margin: 0 auto 25px;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .name {
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 28px;
-            font-weight: 600;
-        }
-        
-        .role {
-            color: #667eea;
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 30px;
-        }
-        
-        .contact-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 30px 0;
-        }
-        
-        .btn {
-            padding: 16px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn-phone {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn-wechat {
-            background: linear-gradient(45deg, #07c160, #38d9a9);
-            color: white;
-            box-shadow: 0 8px 25px rgba(7, 193, 96, 0.3);
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-        }
-        
-        .btn-phone:hover {
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-wechat:hover {
-            box-shadow: 0 15px 35px rgba(7, 193, 96, 0.4);
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .phone-display {
-            background: #f8f9ff;
-            border: 2px solid #e6eaff;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px 0;
-            display: none;
-        }
-        
-        .phone-display.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .phone-number {
-            color: #333;
+        /* --- 大标题 --- */
+        .main-title {
             font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-        
-        .call-direct {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .call-direct:hover {
-            background: #5a67d8;
-            transform: translateY(-1px);
-        }
-        
-        .wechat-info {
-            background: #f0f9ff;
-            border: 2px solid #e0f2fe;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px 0;
-            display: none;
-        }
-        
-        .wechat-info.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-        
-        .wechat-id {
             color: #333;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 40px;
+        }
+
+        /* --- 按钮容器 --- */
+        .actions {
+            width: 100%;
+            max-width: 320px;
         }
         
-        .wechat-tip {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        
-        .copy-btn {
-            background: #07c160;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            background: #06ad56;
-        }
-        
-        .info-section {
-            background: #f8f9ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 25px 0;
-        }
-        
-        .info-title {
-            color: #333;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .info-item {
-            text-align: center;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-        }
-        
-        .info-item .icon {
+        /* --- 通用按钮样式 --- */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 0;
+            margin-bottom: 18px;
             font-size: 18px;
-            margin-bottom: 5px;
+            font-weight: 500;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px; /* 方中带圆，更稳重 */
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .action-button:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+
+        .action-button svg {
+            margin-right: 10px;
+        }
+
+        /* --- 特定按钮颜色 --- */
+        #call-btn {
+            background-color: #4A90E2; /* 电话蓝 */
+        }
+        #wechat-btn {
+            background-color: #07c160; /* 微信绿 */
         }
         
-        .info-item .label {
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 3px;
-        }
-        
-        .info-item .value {
-            color: #333;
-            font-weight: 600;
-            font-size: 13px;
-        }
-        
-        .footer-tip {
-            color: #999;
-            font-size: 13px;
-            line-height: 1.6;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #f0f0f0;
-        }
-        
-        .visitor-info {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+        /* --- 底部提示文字 --- */
+        .footer-note {
+            position: absolute;
+            bottom: 30px;
             font-size: 14px;
-            color: #856404;
+            color: #b2b2b2;
         }
-        
-        .error-info {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #721c24;
-        }
-        
-        .success-info {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #155724;
-        }
-        
-        @media (max-width: 480px) {
-            .card {
-                padding: 35px 25px;
-                margin: 10px;
-            }
-            
-            .contact-buttons {
-                gap: 12px;
-            }
-            
-            .btn {
-                padding: 14px 25px;
-                font-size: 15px;
-            }
-            
-            .phone-number {
-                font-size: 20px;
-            }
-        }
+
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="avatar" id="avatar">👨‍💼</div>
+
+    <div class="container">
+        <!-- 顶部方向盘/警告图标 -->
+        <svg class="icon-header" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+        </svg>
+
+        <h1 class="main-title">联系车主</h1>
         
-        <h1 class="name" id="name">客服专员</h1>
-        <p class="role" id="role">专业咨询顾问</p>
-        
-        <!-- 消息提示区域 -->
-        <div id="messageArea"></div>
-        
-        <div class="contact-buttons">
-            <button class="btn btn-phone" id="phoneBtn">
-                <span>📞</span>
-                <span id="phoneButtonText">查看电话</span>
-            </button>
+        <div class="actions">
+            <!-- 拨打电话按钮 -->
+            <a id="call-btn" class="action-button" href="tel:15565132662">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>拨打电话</span>
+            </a>
             
-            <button class="btn btn-wechat" id="wechatBtn">
-                <span>💬</span>
+            <!-- 添加微信按钮 -->
+            <a id="wechat-btn" class="action-button">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.04 2C6.58 2 2.13 6.27 2.13 11.5c0 2.76 1.28 5.25 3.37 6.94-1.2 2.7-3.37 3.66-3.37 3.66s1.24-.18 2.84-1.1c1.38.47 2.87.73 4.43.73 5.46 0 9.91-4.27 9.91-9.5S17.5 2 12.04 2zM9.51 13.56c-.58 0-1.07-.5-1.07-1.07s.5-1.07 1.07-1.07c.58 0 1.07.5 1.07 1.07s-.5 1.07-1.07 1.07zm4.98 0c-.58 0-1.07-.5-1.07-1.07s.5-1.07 1.07-1.07c.58 0 1.07.5 1.07 1.07s-.49 1.07-1.07 1.07z"/>
+                </svg>
                 <span>添加微信</span>
-            </button>
+            </a>
         </div>
-        
-        <!-- 电话信息区域 -->
-        <div class="phone-display" id="phoneDisplay">
-            <div class="phone-number" id="phoneNumber">-</div>
-            <button class="call-direct" id="callDirect">
-                📱 立即拨打
-            </button>
-        </div>
-        
-        <!-- 微信信息区域 -->
-        <div class="wechat-info" id="wechatInfo">
-            <div class="wechat-id" id="wechatId">微信号：service123</div>
-            <p class="wechat-tip">
-                请复制微信号添加好友<br>
-                或长按微信号进行复制
-            </p>
-            <button class="copy-btn" id="copyWechat">复制微信号</button>
-        </div>
-        
-        <div class="info-section">
-            <div class="info-title">服务信息</div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="icon">🕐</div>
-                    <div class="label">服务时间</div>
-                    <div class="value" id="serviceTime">9:00-21:00</div>
-                </div>
-                <div class="info-item">
-                    <div class="icon">⚡</div>
-                    <div class="label">响应时间</div>
-                    <div class="value">3秒接听</div>
-                </div>
-                <div class="info-item">
-                    <div class="icon">🎯</div>
-                    <div class="label">专业度</div>
-                    <div class="value">5年经验</div>
-                </div>
-                <div class="info-item">
-                    <div class="icon">✅</div>
-                    <div class="label">服务质量</div>
-                    <div class="value">99%满意</div>
-                </div>
-            </div>
-        </div>
-        
-        <p class="footer-tip" id="footerTip">
-            📱 点击按钮查看联系方式<br>
-            🔒 信息安全保护，请放心联系<br>
-            💡 专业解答您的所有问题
-        </p>
     </div>
+    
 
     <script>
-        // 全局配置
-        let currentConfig = {
-            // 默认配置
-            name: '客服专员',
-            role: '专业咨询顾问', 
-            phone: '',  // 默认为空，通过URL传参
-            phoneDisplay: '',
-            wechat: 'service123',
-            avatar: '👨‍💼',
-            serviceTime: '9:00-21:00',
+        document.addEventListener('DOMContentLoaded', function() {
+            const wechatBtn = document.getElementById('wechat-btn');
             
-            // 预设配置
-            profiles: {
-                'sales': {
-                    name: '销售顾问',
-                    role: '产品销售专家',
-                    wechat: 'sales_advisor',
-                    avatar: '👩‍💼',
-                    serviceTime: '8:00-22:00'
-                },
-                'tech': {
-                    name: '技术支持',
-                    role: '技术服务专家',
-                    wechat: 'tech_support',
-                    avatar: '👨‍💻',
-                    serviceTime: '9:00-18:00'
-                },
-                'vip': {
-                    name: 'VIP客服',
-                    role: '高级服务顾问',
-                    wechat: 'vip_service',
-                    avatar: '⭐',
-                    serviceTime: '24小时'
-                }
-            }
-        };
+            // 在这里填入你的微信号
+            const wechatId = 'YourWechatID';
 
-        // 获取URL参数
-        function getUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            return {
-                phone: params.get('phone') || params.get('p'),
-                type: params.get('type') || params.get('t'),
-                name: params.get('name') || params.get('n'),
-                wechat: params.get('wechat') || params.get('w'),
-                from: params.get('from') || params.get('f'),
-                source: params.get('source') || params.get('s'),
-                campaign: params.get('campaign') || params.get('c')
-            };
-        }
-
-        // 验证电话号码
-        function validatePhone(phone) {
-            if (!phone) return false;
-            
-            // 移除所有非数字字符
-            const cleanPhone = phone.replace(/\D/g, '');
-            
-            // 验证长度和格式
-            if (cleanPhone.length === 11 && /^1[3-9]\d{9}$/.test(cleanPhone)) {
-                return true; // 手机号
-            } else if (cleanPhone.length >= 7 && cleanPhone.length <= 12) {
-                return true; // 固话或其他号码
-            } else if (cleanPhone.length >= 3 && cleanPhone.length <= 6) {
-                return true; // 短号码
-            }
-            
-            return false;
-        }
-
-        // 格式化电话显示
-        function formatPhoneDisplay(phone) {
-            if (!phone) return '';
-            
-            const cleanPhone = phone.replace(/\D/g, '');
-            
-            // 11位手机号格式化
-            if (cleanPhone.length === 11) {
-                return cleanPhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-            }
-            // 10位400电话
-            else if (cleanPhone.length === 10 && cleanPhone.startsWith('400')) {
-                return cleanPhone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
-            }
-            // 其他格式保持原样或简单分组
-            else if (cleanPhone.length >= 7) {
-                return cleanPhone.replace(/(\d{3,4})(\d{4})/, '$1-$2');
-            }
-            
-            return cleanPhone;
-        }
-
-        // 显示消息
-        function showMessage(message, type = 'info') {
-            const messageArea = document.getElementById('messageArea');
-            const messageDiv = document.createElement('div');
-            
-            let className = 'visitor-info';
-            if (type === 'error') className = 'error-info';
-            if (type === 'success') className = 'success-info';
-            
-            messageDiv.className = className;
-            messageDiv.innerHTML = message;
-            
-            messageArea.innerHTML = '';
-            messageArea.appendChild(messageDiv);
-            
-            // 3秒后自动隐藏非错误消息
-            if (type !== 'error') {
-                setTimeout(() => {
-                    messageDiv.style.display = 'none';
-                }, 3000);
-            }
-        }
-
-        // 初始化页面
-        function initPage() {
-            const params = getUrlParams();
-            
-            // 选择预设配置
-            if (params.type && currentConfig.profiles[params.type]) {
-                Object.assign(currentConfig, currentConfig.profiles[params.type]);
-            }
-            
-            // 处理电话号码参数
-            if (params.phone) {
-                if (validatePhone(params.phone)) {
-                    currentConfig.phone = params.phone.replace(/\D/g, ''); // 保存纯数字
-                    currentConfig.phoneDisplay = formatPhoneDisplay(params.phone);
+            wechatBtn.addEventListener('click', function() {
+                // 使用 Clipboard API 复制微信号
+                navigator.clipboard.writeText(wechatId).then(function() {
+                    // 成功复制后的反馈
+                    const originalText = wechatBtn.innerHTML;
+                    wechatBtn.innerHTML = '<span>✅ 已复制，请打开微信添加</span>';
                     
-                    showMessage(`📞 已获取联系电话：${currentConfig.phoneDisplay}`, 'success');
-                    document.getElementById('phoneButtonText').textContent = '拨打电话';
-                } else {
-                    showMessage('❌ 电话号码格式不正确，请检查URL参数', 'error');
-                    document.getElementById('phoneButtonText').textContent = '电话号码无效';
-                    document.getElementById('phoneBtn').disabled = true;
-                }
-            } else {
-                showMessage('⚠️ 未检测到电话号码参数，请在URL中添加 ?phone=号码', 'error');
-                document.getElementById('phoneButtonText').textContent = '缺少电话号码';
-                document.getElementById('phoneBtn').disabled = true;
-            }
-            
-            // 其他参数覆盖
-            if (params.name) currentConfig.name = decodeURIComponent(params.name);
-            if (params.wechat) currentConfig.wechat = params.wechat;
-            
-            // 更新页面显示
-            updatePageContent();
-            
-            // 显示访问信息
-            showVisitInfo(params);
-            
-            // 绑定事件
-            bindEvents();
-            
-            // 记录访问
-            logVisit(params);
-        }
+                    setTimeout(() => {
+                        wechatBtn.innerHTML = originalText;
+                        // 尝试调起微信
+                        window.location.href = 'weixin://15565132662';
+                    }, 2500); // 2.5秒后恢复原状
 
-        // 更新页面内容
-        function updatePageContent() {
-            document.getElementById('name').textContent = currentConfig.name;
-            document.getElementById('role').textContent = currentConfig.role;
-            document.getElementById('avatar').textContent = currentConfig.avatar;
-            document.getElementById('phoneNumber').textContent = currentConfig.phoneDisplay || '号码无效';
-            document.getElementById('wechatId').textContent = `微信号：${currentConfig.wechat}`;
-            document.getElementById('serviceTime').textContent = currentConfig.serviceTime;
-        }
-
-        // 显示访问信息
-        function showVisitInfo(params) {
-            const visitInfo = [];
-            
-            if (params.from) visitInfo.push(`来源：${decodeURIComponent(params.from)}`);
-            if (params.source) visitInfo.push(`渠道：${decodeURIComponent(params.source)}`);
-            if (params.campaign) visitInfo.push(`活动：${decodeURIComponent(params.campaign)}`);
-            
-            if (visitInfo.length > 0) {
-                setTimeout(() => {
-                    showMessage(`👋 欢迎访问！${visitInfo.join(' | ')}`, 'info');
-                }, 1500);
-            }
-        }
-
-        // 绑定事件
-        function bindEvents() {
-            // 电话按钮点击
-            document.getElementById('phoneBtn').addEventListener('click', function() {
-                if (!currentConfig.phone) {
-                    showMessage('❌ 电话号码无效，无法拨打', 'error');
-                    return;
-                }
-                
-                const phoneDisplay = document.getElementById('phoneDisplay');
-                
-                if (phoneDisplay.classList.contains('show')) {
-                    // 如果已显示，直接拨打
-                    makeCall();
-                } else {
-                    // 显示电话号码
-                    phoneDisplay.classList.add('show');
-                    document.getElementById('wechatInfo').classList.remove('show');
-                    
-                    showMessage('📱 点击"立即拨打"按钮拨打电话', 'info');
-                }
+                }, function(err) {
+                    // 如果复制失败，给用户提示
+                    alert('复制微信号失败，请手动添加: ' + wechatId);
+                });
             });
-
-            // 微信按钮点击
-            document.getElementById('wechatBtn').addEventListener('click', function() {
-                const wechatInfo = document.getElementById('wechatInfo');
-                wechatInfo.classList.toggle('show');
-                document.getElementById('phoneDisplay').classList.remove('show');
-                
-                if (wechatInfo.classList.contains('show')) {
-                    showMessage('💬 请复制微信号添加好友', 'info');
-                }
-            });
-
-            // 拨打电话
-            document.getElementById('callDirect').addEventListener('click', makeCall);
-
-            // 复制微信号
-            document.getElementById('copyWechat').addEventListener('click', function() {
-                copyToClipboard(currentConfig.wechat);
-                this.textContent = '已复制！';
-                showMessage('✅ 微信号已复制到剪贴板', 'success');
-                
-                setTimeout(() => {
-                    this.textContent = '复制微信号';
-                }, 2000);
-                
-                logAction('copy_wechat', currentConfig.wechat);
-            });
-        }
-
-        // 拨打电话
-        function makeCall() {
-            if (!currentConfig.phone) {
-                showMessage('❌ 电话号码无效', 'error');
-                return;
-            }
-            
-            const telUrl = `tel:${currentConfig.phone}`;
-            
-            // 显示拨打提示
-            showMessage(`📞 正在拨打：${currentConfig.phoneDisplay}`, 'success');
-            
-            // 尝试拨打电话
-            try {
-                window.location.href = telUrl;
-                logAction('call_attempt', currentConfig.phone);
-            } catch (error) {
-                showMessage('❌ 拨打失败，请手动拨打电话', 'error');
-                console.error('拨打电话失败:', error);
-            }
-        }
-
-        // 复制到剪贴板
-        function copyToClipboard(text) {
-            if (navigator.clipboard && window.isSecureContext) {
-                return navigator.clipboard.writeText(text);
-            } else {
-                // 兼容旧浏览器
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                textArea.style.position = 'absolute';
-                textArea.style.opacity = '0';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-            }
-        }
-
-        // 记录访问
-        function logVisit(params) {
-            const visitData = {
-                timestamp: new Date().toISOString(),
-                url: window.location.href,
-                phone: params.phone,
-                params: params,
-                userAgent: navigator.userAgent,
-                referrer: document.referrer
-            };
-            
-            console.log('📊 访问记录:', visitData);
-        }
-
-        // 记录行为
-        function logAction(action, value) {
-            const actionData = {
-                action: action,
-                value: value,
-                phone: currentConfig.phone,
-                timestamp: new Date().toISOString(),
-                url: window.location.href
-            };
-            
-            console.log('📊 行为记录:', actionData);
-        }
-
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', initPage);
+        });
     </script>
+
 </body>
 </html>
