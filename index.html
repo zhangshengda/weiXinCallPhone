@@ -131,7 +131,7 @@
             const wechatBtn = document.getElementById('wechat-btn');
             
             // 在这里填入你的微信号
-            const wechatId = 'YourWechatID';
+            const wechatId = '15565132662';
 
             wechatBtn.addEventListener('click', function() {
                 // 使用 Clipboard API 复制微信号
@@ -143,7 +143,7 @@
                     setTimeout(() => {
                         wechatBtn.innerHTML = originalText;
                         // 尝试调起微信
-                        window.location.href = 'weixin://15565132662';
+                        window.location.href = 'weixin://';
                     }, 2500); // 2.5秒后恢复原状
 
                 }, function(err) {
