@@ -5,18 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>联系车主</title>
     <style>
-        /* --- 基础样式 --- */
+        /* --- 基础与背景样式 --- */
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff; /* 纯白背景，更干净 */
+            margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
             -webkit-tap-highlight-color: transparent;
+            overflow: hidden; /* 防止波浪元素导致滚动 */
+        }
+        
+        .background {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            /* 动态渐变背景 */
+            background: linear-gradient(125deg, #e0c3fc, #8ec5fc, #a1c4fd, #fbc2eb);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            z-index: -1;
         }
 
-        /* --- 主容器 --- */
+        /* 渐变动画 */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 波浪背景元素 */
+        .wave {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            opacity: 0.6;
+            z-index: -1;
+        }
+        .wave.top {
+            top: -5px;
+            transform: rotate(180deg);
+        }
+        .wave.bottom {
+            bottom: -5px;
+        }
+
+        /* --- 内容卡片 --- */
         .container {
             display: flex;
             flex-direction: column;
@@ -27,132 +57,91 @@
             padding: 20px;
             box-sizing: border-box;
         }
-        
-        /* --- 顶部图标 --- */
-        .icon-header {
-            width: 70px;
-            height: 70px;
-            margin-bottom: 20px;
-            color: #4A90E2; /* 一种更现代的蓝色 */
+
+        .content-card {
+            padding: 40px 30px;
+            border-radius: 20px;
+            /* 毛玻璃效果 */
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); /* 兼容Safari */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
         
-        /* --- 大标题 --- */
         .main-title {
             font-size: 24px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 40px;
+            color: #2c3e50; /* 更深、更稳重的文字颜色 */
+            margin-top: 0;
+            margin-bottom: 30px;
         }
 
-        /* --- 按钮容器 --- */
-        .actions {
-            width: 100%;
-            max-width: 320px;
-        }
-        
-        /* --- 通用按钮样式 --- */
+        /* --- 按钮样式 --- */
+        .actions { width: 100%; max-width: 280px; }
         .action-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 16px 0;
-            margin-bottom: 18px;
-            font-size: 18px;
-            font-weight: 500;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px; /* 方中带圆，更稳重 */
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; padding: 15px 0; margin-bottom: 15px;
+            font-size: 17px; font-weight: 500; color: #ffffff;
+            border: none; border-radius: 10px; text-decoration: none; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
         }
-
-        .action-button:active {
-            transform: scale(0.97);
-            opacity: 0.9;
-        }
-
-        .action-button svg {
-            margin-right: 10px;
-        }
-
-        /* --- 特定按钮颜色 --- */
-        #call-btn {
-            background-color: #4A90E2; /* 电话蓝 */
-        }
-        #wechat-btn {
-            background-color: #07c160; /* 微信绿 */
-        }
+        .action-button:active { transform: scale(0.97); opacity: 0.9; }
+        .action-button svg { margin-right: 10px; }
+        #call-btn { background-color: #3498db; } /* 柔和的蓝色 */
+        #wechat-btn { background-color: #2ecc71; } /* 柔和的绿色 */
         
-        /* --- 底部提示文字 --- */
-        .footer-note {
-            position: absolute;
-            bottom: 30px;
-            font-size: 14px;
-            color: #b2b2b2;
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- 顶部方向盘/警告图标 -->
-        <svg class="icon-header" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-        </svg>
-
-        <h1 class="main-title">联系车主</h1>
-        
-        <div class="actions">
-            <!-- 拨打电话按钮 -->
-            <a id="call-btn" class="action-button" href="tel:15565132662">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                </svg>
-                <span>拨打电话</span>
-            </a>
-            
-            <!-- 添加微信按钮 -->
-            <a id="wechat-btn" class="action-button">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12.04 2C6.58 2 2.13 6.27 2.13 11.5c0 2.76 1.28 5.25 3.37 6.94-1.2 2.7-3.37 3.66-3.37 3.66s1.24-.18 2.84-1.1c1.38.47 2.87.73 4.43.73 5.46 0 9.91-4.27 9.91-9.5S17.5 2 12.04 2zM9.51 13.56c-.58 0-1.07-.5-1.07-1.07s.5-1.07 1.07-1.07c.58 0 1.07.5 1.07 1.07s-.5 1.07-1.07 1.07zm4.98 0c-.58 0-1.07-.5-1.07-1.07s.5-1.07 1.07-1.07c.58 0 1.07.5 1.07 1.07s-.49 1.07-1.07 1.07z"/>
-                </svg>
-                <span>添加微信</span>
-            </a>
-        </div>
+    <!-- 动态背景层 -->
+    <div class="background"></div>
+    
+    <!-- 波浪SVG层 -->
+    <div class="wave top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="0.8" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+    </div>
+    <div class="wave bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="0.8" d="M0,96L48,117.3C96,139,192,181,288,197.3C384,213,480,203,576,176C672,149,768,107,864,117.3C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
     </div>
     
+    <!-- 内容层 -->
+    <div class="container">
+        <div class="content-card">
+            <h1 class="main-title">联系车主</h1>
+            <div class="actions">
+                <a id="call-btn" class="action-button" href="tel:15565132662">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span>拨打电话</span>
+                </a>
+                <a id="wechat-btn" class="action-button">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.27 2.13 11.5c0 2.76 1.28 5.25 3.37 6.94-1.2 2.7-3.37 3.66-3.37 3.66s1.24-.18 2.84-1.1c1.38.47 2.87.73 4.43.73 5.46 0 9.91-4.27 9.91-9.5S17.5 2 12.04 2zM9.51 13.56c-.58 0-1.07-.5-1.07-1.07s.5-1.07 1.07-1.07c.58 0 1.07.5 1.07 1.07s-.5 1.07-1.07 1.07zm4.98 0c-.58 0-1.07-.5-1.07-1.07s.5-1.07 1.07-1.07c.58 0 1.07.5 1.07 1.07s-.49 1.07-1.07 1.07z"/></svg>
+                    <span>添加微信</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const wechatBtn = document.getElementById('wechat-btn');
-            
-            // 在这里填入你的微信号
-            const wechatId = '15565132662';
+            const wechatId = '15565132662'; // 在这里填入你的微信号
 
             wechatBtn.addEventListener('click', function() {
-                // 使用 Clipboard API 复制微信号
                 navigator.clipboard.writeText(wechatId).then(function() {
-                    // 成功复制后的反馈
-                    const originalText = wechatBtn.innerHTML;
-                    wechatBtn.innerHTML = '<span>✅ 已复制，请打开微信添加</span>';
-                    
+                    const originalHTML = wechatBtn.innerHTML;
+                    wechatBtn.innerHTML = '<span>✅ 已复制，请打开微信</span>';
                     setTimeout(() => {
-                        wechatBtn.innerHTML = originalText;
-                        // 尝试调起微信
+                        wechatBtn.innerHTML = originalHTML;
                         window.location.href = 'weixin://';
-                    }, 2500); // 2.5秒后恢复原状
-
+                    }, 2500);
                 }, function(err) {
-                    // 如果复制失败，给用户提示
-                    alert('复制微信号失败，请手动添加: ' + wechatId);
+                    alert('复制失败，请手动添加: ' + wechatId);
                 });
             });
         });
     </script>
-
 </body>
 </html>
