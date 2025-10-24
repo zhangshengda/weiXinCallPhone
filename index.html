@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信扫码直拨电话</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a6dff, #5a1aff);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 0 0 50% 50%;
+            transform: scaleX(2);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo {
+            background: linear-gradient(45deg, #25d366, #128C7E);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo i {
+            font-size: 40px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            background: linear-gradient(45deg, #f5f7fa, #e4e7eb);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .qr-placeholder::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.5), transparent);
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% {transform: rotate(0deg) translate(-50%, -50%);}
+            100% {transform: rotate(360deg) translate(-50%, -50%);}
+        }
+        
+        .qr-placeholder .center {
+            width: 50px;
+            height: 50px;
+            background: #128C7E;
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .qr-placeholder .pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 45%, #128C7E 45%, #128C7E 55%, transparent 55%),
+                linear-gradient(0deg, transparent 45%, #128C7E 45%, #128C7E 55%, transparent 55%);
+            z-index: 1;
+        }
+        
+        .phone-number {
+            background: white;
+            border-radius: 30px;
+            padding: 15px;
+            margin: 25px 0;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .phone-number i {
+            margin-right: 10px;
+            color: #128C7E;
+        }
+        
+        .call-button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(to right, #25d366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .call-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to right, #2de06d, #139d80);
+        }
+        
+        .call-button:active {
+            transform: translateY(1px);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+        
+        .instructions h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions h2 i {
+            margin-right: 10px;
+        }
+        
+        .step {
+            display: flex;
+            margin: 15px 0;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: white;
+            color: #1a6dff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+        
+        .step-content p {
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .notice {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid gold;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            color: #ffdf5c;
+            font-size: 14px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            padding-bottom: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .qr-placeholder {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .phone-number {
+                font-size: 20px;
+            }
+            
+            .call-button {
+                padding: 16px;
+                font-size: 16px;
+            }
+        }
+        
+        .bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        
+        .phone-confirm {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .confirm-dialog {
+            background: white;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .confirm-dialog h3 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .confirm-phone {
+            font-size: 24px;
+            font-weight: bold;
+            color: #128C7E;
+            margin: 20px 0;
+        }
+        
+        .dialog-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .dialog-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        
+        .cancel-button {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .cancel-button:hover {
+            background: #e5e5e5;
+        }
+        
+        .call-button-dialog {
+            background: linear-gradient(to right, #25d366, #128C7E);
+            color: white;
+        }
+        
+        .call-button-dialog:hover {
+            background: linear-gradient(to right, #2de06d, #139d80);
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景气泡效果 -->
+    <div class="bubbles">
+        <div class="bubble" style="width: 60px; height: 60px; top: 10%; left: 10%;"></div>
+        <div class="bubble" style="width: 40px; height: 40px; top: 20%; left: 80%;"></div>
+        <div class="bubble" style="width: 80px; height: 80px; top: 60%; left: 15%;"></div>
+        <div class="bubble" style="width: 30px; height: 30px; top: 80%; left: 70%;"></div>
+        <div class="bubble" style="width: 50px; height: 50px; top: 40%; left: 55%;"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fa-brands fa-weixin"></i>
+            </div>
+            <h1>微信扫码直拨电话</h1>
+            <p class="subtitle">扫码后一键拨打指定号码</p>
+        </div>
+        
+        <div class="qr-container">
+            <h2>请使用微信扫描二维码</h2>
+            <div class="qr-placeholder">
+                <div class="pattern"></div>
+                <div class="center"></div>
+            </div>
+            <p>扫描后根据提示拨打联系电话</p>
+        </div>
+        
+        <div class="phone-number">
+            <i class="fas fa-phone-alt"></i>
+            <span id="phone-display">400-888-8888</span>
+        </div>
+        
+        <a href="tel:4008888888" class="call-button" id="call-btn">
+            <i class="fas fa-phone-alt"></i> 立即拨打
+        </a>
+        
+        <div class="instructions">
+            <h2><i class="fas fa-info-circle"></i> 使用说明</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>扫描二维码</h3>
+                    <p>使用微信"扫一扫"功能扫描上方二维码</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>打开页面</h3>
+                    <p>微信中点击"打开页面"按钮 (Android系统请选择默认浏览器打开)</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>一键拨号</h3>
+                    <p>点击页面中的"立即拨打"按钮即可开始通话</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="notice">
+            <i class="fas fa-exclamation-triangle"></i> 注意：拨号功能需要在手机浏览器中才能正常使用
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 微信直拨电话服务 | 技术支持</p>
+    </div>
+    
+    <!-- 拨号确认弹窗 -->
+    <div class="phone-confirm" id="confirm-dialog">
+        <div class="confirm-dialog">
+            <h3>确认拨打电话</h3>
+            <p>您即将拨打以下号码：</p>
+            <div class="confirm-phone">400-888-8888</div>
+            <p>电话接通后可能会产生通话费用</p>
+            <div class="dialog-buttons">
+                <button class="dialog-button cancel-button" id="cancel-call">取消</button>
+                <button class="dialog-button call-button-dialog" id="confirm-call">立即拨打</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 创建动态气泡
+        function createBubbles() {
+            const bubblesContainer = document.querySelector('.bubbles');
+            
+            for (let i = 0; i < 15; i++) {
+                const size = Math.random() * 40 + 10;
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.top = `${Math.random() * 100}%`;
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.opacity = Math.random() * 0.4 + 0.1;
+                
+                // 随机动画时长和延迟
+                const duration = Math.random() * 8 + 8;
+                const delay = Math.random() * 5;
+                bubble.style.animationDuration = `${duration}s`;
+                bubble.style.animationDelay = `${delay}s`;
+                
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+        
+        // 拨号处理
+        document.getElementById('call-btn').addEventListener('click', function(e) {
+            // 阻止默认行为（立即跳转拨号）
+            e.preventDefault();
+            
+            // 显示确认对话框
+            const dialog = document.getElementById('confirm-dialog');
+            dialog.style.display = 'flex';
+            setTimeout(() => {
+                dialog.style.opacity = '1';
+                document.querySelector('.confirm-dialog').style.transform = 'translateY(0)';
+            }, 10);
+        });
+        
+        // 确认拨打
+        document.getElementById('confirm-call').addEventListener('click', function() {
+            // 实际拨号操作
+            window.location.href = 'tel:4008888888';
+        });
+        
+        // 取消拨打
+        document.getElementById('cancel-call').addEventListener('click', function() {
+            const dialog = document.getElementById('confirm-dialog');
+            dialog.style.opacity = '0';
+            document.querySelector('.confirm-dialog').style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                dialog.style.display = 'none';
+            }, 300);
+        });
+        
+        // 初始化气泡效果
+        createBubbles();
+    </script>
+</body>
+</html>
