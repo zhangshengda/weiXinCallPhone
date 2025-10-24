@@ -3,528 +3,712 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>微信扫码直拨电话</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>联系我们</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a6dff, #5a1aff);
-            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
-            overflow-x: hidden;
         }
         
-        body:before {
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 250px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 0 0 50% 50%;
-            transform: scaleX(2);
-            z-index: -1;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
         
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .logo {
-            background: linear-gradient(45deg, #25d366, #128C7E);
+        .avatar {
             width: 80px;
             height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            margin: 0 auto 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .logo i {
-            font-size: 40px;
-            color: white;
-        }
-        
-        h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .subtitle {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 16px;
-        }
-        
-        .qr-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-        
-        .qr-placeholder {
-            width: 200px;
-            height: 200px;
-            margin: 10px auto;
-            background: linear-gradient(45deg, #f5f7fa, #e4e7eb);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .qr-placeholder::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.5), transparent);
-            animation: shine 2s infinite;
-        }
-        
-        @keyframes shine {
-            0% {transform: rotate(0deg) translate(-50%, -50%);}
-            100% {transform: rotate(360deg) translate(-50%, -50%);}
-        }
-        
-        .qr-placeholder .center {
-            width: 50px;
-            height: 50px;
-            background: #128C7E;
-            border-radius: 8px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .qr-placeholder .pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(90deg, transparent 45%, #128C7E 45%, #128C7E 55%, transparent 55%),
-                linear-gradient(0deg, transparent 45%, #128C7E 45%, #128C7E 55%, transparent 55%);
-            z-index: 1;
-        }
-        
-        .phone-number {
-            background: white;
-            border-radius: 30px;
-            padding: 15px;
-            margin: 25px 0;
-            color: #333;
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .phone-number i {
-            margin-right: 10px;
-            color: #128C7E;
-        }
-        
-        .call-button {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(to right, #25d366, #128C7E);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            text-decoration: none;
-        }
-        
-        .call-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-            background: linear-gradient(to right, #2de06d, #139d80);
-        }
-        
-        .call-button:active {
-            transform: translateY(1px);
-        }
-        
-        .instructions {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-        }
-        
-        .instructions h2 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .instructions h2 i {
-            margin-right: 10px;
-        }
-        
-        .step {
-            display: flex;
-            margin: 15px 0;
-            align-items: flex-start;
-        }
-        
-        .step-number {
-            background: white;
-            color: #1a6dff;
-            width: 30px;
-            height: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-            margin-right: 15px;
+            font-size: 36px;
+            color: white;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         
-        .step-content p {
-            margin-top: 5px;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 15px;
+        .name {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .role {
+            color: #667eea;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+        
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            padding: 16px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-phone {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-wechat {
+            background: linear-gradient(45deg, #07c160, #38d9a9);
+            color: white;
+            box-shadow: 0 8px 25px rgba(7, 193, 96, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .btn-phone:hover {
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-wechat:hover {
+            box-shadow: 0 15px 35px rgba(7, 193, 96, 0.4);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .phone-display {
+            background: #f8f9ff;
+            border: 2px solid #e6eaff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            display: none;
+        }
+        
+        .phone-display.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .phone-number {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        
+        .call-direct {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .call-direct:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+        
+        .wechat-info {
+            background: #f0f9ff;
+            border: 2px solid #e0f2fe;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            display: none;
+        }
+        
+        .wechat-info.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .wechat-id {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .wechat-tip {
+            color: #666;
+            font-size: 14px;
             line-height: 1.5;
         }
         
-        .notice {
-            background: rgba(255, 215, 0, 0.15);
-            border-left: 4px solid gold;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 25px;
-            color: #ffdf5c;
-            font-size: 14px;
+        .copy-btn {
+            background: #07c160;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
         }
         
-        .footer {
+        .copy-btn:hover {
+            background: #06ad56;
+        }
+        
+        .info-section {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .info-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .info-item {
             text-align: center;
-            margin-top: 30px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .info-item .icon {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .info-item .label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        
+        .info-item .value {
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .footer-tip {
+            color: #999;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .visitor-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            padding-bottom: 20px;
+            color: #856404;
+        }
+        
+        .error-info {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #721c24;
+        }
+        
+        .success-info {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #155724;
         }
         
         @media (max-width: 480px) {
-            .container {
-                padding: 20px;
+            .card {
+                padding: 35px 25px;
+                margin: 10px;
             }
             
-            h1 {
-                font-size: 24px;
+            .contact-buttons {
+                gap: 12px;
             }
             
-            .qr-placeholder {
-                width: 180px;
-                height: 180px;
+            .btn {
+                padding: 14px 25px;
+                font-size: 15px;
             }
             
             .phone-number {
                 font-size: 20px;
             }
-            
-            .call-button {
-                padding: 16px;
-                font-size: 16px;
-            }
-        }
-        
-        .bubbles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-        }
-        
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            animation: float 8s infinite ease-in-out;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-            }
-            100% {
-                transform: translateY(0) rotate(360deg);
-            }
-        }
-        
-        .phone-confirm {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .confirm-dialog {
-            background: white;
-            border-radius: 20px;
-            width: 85%;
-            max-width: 400px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-        
-        .confirm-dialog h3 {
-            color: #333;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        
-        .confirm-phone {
-            font-size: 24px;
-            font-weight: bold;
-            color: #128C7E;
-            margin: 20px 0;
-        }
-        
-        .dialog-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        .dialog-button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s ease;
-        }
-        
-        .cancel-button {
-            background: #f0f0f0;
-            color: #666;
-        }
-        
-        .cancel-button:hover {
-            background: #e5e5e5;
-        }
-        
-        .call-button-dialog {
-            background: linear-gradient(to right, #25d366, #128C7E);
-            color: white;
-        }
-        
-        .call-button-dialog:hover {
-            background: linear-gradient(to right, #2de06d, #139d80);
         }
     </style>
 </head>
 <body>
-    <!-- 背景气泡效果 -->
-    <div class="bubbles">
-        <div class="bubble" style="width: 60px; height: 60px; top: 10%; left: 10%;"></div>
-        <div class="bubble" style="width: 40px; height: 40px; top: 20%; left: 80%;"></div>
-        <div class="bubble" style="width: 80px; height: 80px; top: 60%; left: 15%;"></div>
-        <div class="bubble" style="width: 30px; height: 30px; top: 80%; left: 70%;"></div>
-        <div class="bubble" style="width: 50px; height: 50px; top: 40%; left: 55%;"></div>
-    </div>
-    
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <i class="fa-brands fa-weixin"></i>
-            </div>
-            <h1>微信扫码直拨电话</h1>
-            <p class="subtitle">扫码后一键拨打指定号码</p>
-        </div>
+    <div class="card">
+        <div class="avatar" id="avatar">👨‍💼</div>
         
-        <div class="qr-container">
-            <h2>请使用微信扫描二维码</h2>
-            <div class="qr-placeholder">
-                <div class="pattern"></div>
-                <div class="center"></div>
-            </div>
-            <p>扫描后根据提示拨打联系电话</p>
-        </div>
+        <h1 class="name" id="name">客服专员</h1>
+        <p class="role" id="role">专业咨询顾问</p>
         
-        <div class="phone-number">
-            <i class="fas fa-phone-alt"></i>
-            <span id="phone-display">400-888-8888</span>
-        </div>
+        <!-- 消息提示区域 -->
+        <div id="messageArea"></div>
         
-        <a href="tel:4008888888" class="call-button" id="call-btn">
-            <i class="fas fa-phone-alt"></i> 立即拨打
-        </a>
-        
-        <div class="instructions">
-            <h2><i class="fas fa-info-circle"></i> 使用说明</h2>
+        <div class="contact-buttons">
+            <button class="btn btn-phone" id="phoneBtn">
+                <span>📞</span>
+                <span id="phoneButtonText">查看电话</span>
+            </button>
             
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3>扫描二维码</h3>
-                    <p>使用微信"扫一扫"功能扫描上方二维码</p>
+            <button class="btn btn-wechat" id="wechatBtn">
+                <span>💬</span>
+                <span>添加微信</span>
+            </button>
+        </div>
+        
+        <!-- 电话信息区域 -->
+        <div class="phone-display" id="phoneDisplay">
+            <div class="phone-number" id="phoneNumber">-</div>
+            <button class="call-direct" id="callDirect">
+                📱 立即拨打
+            </button>
+        </div>
+        
+        <!-- 微信信息区域 -->
+        <div class="wechat-info" id="wechatInfo">
+            <div class="wechat-id" id="wechatId">微信号：service123</div>
+            <p class="wechat-tip">
+                请复制微信号添加好友<br>
+                或长按微信号进行复制
+            </p>
+            <button class="copy-btn" id="copyWechat">复制微信号</button>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-title">服务信息</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="icon">🕐</div>
+                    <div class="label">服务时间</div>
+                    <div class="value" id="serviceTime">9:00-21:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">⚡</div>
+                    <div class="label">响应时间</div>
+                    <div class="value">3秒接听</div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">🎯</div>
+                    <div class="label">专业度</div>
+                    <div class="value">5年经验</div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">✅</div>
+                    <div class="label">服务质量</div>
+                    <div class="value">99%满意</div>
                 </div>
             </div>
-            
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3>打开页面</h3>
-                    <p>微信中点击"打开页面"按钮 (Android系统请选择默认浏览器打开)</p>
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3>一键拨号</h3>
-                    <p>点击页面中的"立即拨打"按钮即可开始通话</p>
-                </div>
-            </div>
         </div>
         
-        <div class="notice">
-            <i class="fas fa-exclamation-triangle"></i> 注意：拨号功能需要在手机浏览器中才能正常使用
-        </div>
+        <p class="footer-tip" id="footerTip">
+            📱 点击按钮查看联系方式<br>
+            🔒 信息安全保护，请放心联系<br>
+            💡 专业解答您的所有问题
+        </p>
     </div>
-    
-    <div class="footer">
-        <p>© 2023 微信直拨电话服务 | 技术支持</p>
-    </div>
-    
-    <!-- 拨号确认弹窗 -->
-    <div class="phone-confirm" id="confirm-dialog">
-        <div class="confirm-dialog">
-            <h3>确认拨打电话</h3>
-            <p>您即将拨打以下号码：</p>
-            <div class="confirm-phone">400-888-8888</div>
-            <p>电话接通后可能会产生通话费用</p>
-            <div class="dialog-buttons">
-                <button class="dialog-button cancel-button" id="cancel-call">取消</button>
-                <button class="dialog-button call-button-dialog" id="confirm-call">立即拨打</button>
-            </div>
-        </div>
-    </div>
-    
+
     <script>
-        // 创建动态气泡
-        function createBubbles() {
-            const bubblesContainer = document.querySelector('.bubbles');
+        // 全局配置
+        let currentConfig = {
+            // 默认配置
+            name: '客服专员',
+            role: '专业咨询顾问', 
+            phone: '',  // 默认为空，通过URL传参
+            phoneDisplay: '',
+            wechat: 'service123',
+            avatar: '👨‍💼',
+            serviceTime: '9:00-21:00',
             
-            for (let i = 0; i < 15; i++) {
-                const size = Math.random() * 40 + 10;
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                bubble.style.top = `${Math.random() * 100}%`;
-                bubble.style.left = `${Math.random() * 100}%`;
-                bubble.style.opacity = Math.random() * 0.4 + 0.1;
-                
-                // 随机动画时长和延迟
-                const duration = Math.random() * 8 + 8;
-                const delay = Math.random() * 5;
-                bubble.style.animationDuration = `${duration}s`;
-                bubble.style.animationDelay = `${delay}s`;
-                
-                bubblesContainer.appendChild(bubble);
+            // 预设配置
+            profiles: {
+                'sales': {
+                    name: '销售顾问',
+                    role: '产品销售专家',
+                    wechat: 'sales_advisor',
+                    avatar: '👩‍💼',
+                    serviceTime: '8:00-22:00'
+                },
+                'tech': {
+                    name: '技术支持',
+                    role: '技术服务专家',
+                    wechat: 'tech_support',
+                    avatar: '👨‍💻',
+                    serviceTime: '9:00-18:00'
+                },
+                'vip': {
+                    name: 'VIP客服',
+                    role: '高级服务顾问',
+                    wechat: 'vip_service',
+                    avatar: '⭐',
+                    serviceTime: '24小时'
+                }
+            }
+        };
+
+        // 获取URL参数
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                phone: params.get('phone') || params.get('p'),
+                type: params.get('type') || params.get('t'),
+                name: params.get('name') || params.get('n'),
+                wechat: params.get('wechat') || params.get('w'),
+                from: params.get('from') || params.get('f'),
+                source: params.get('source') || params.get('s'),
+                campaign: params.get('campaign') || params.get('c')
+            };
+        }
+
+        // 验证电话号码
+        function validatePhone(phone) {
+            if (!phone) return false;
+            
+            // 移除所有非数字字符
+            const cleanPhone = phone.replace(/\D/g, '');
+            
+            // 验证长度和格式
+            if (cleanPhone.length === 11 && /^1[3-9]\d{9}$/.test(cleanPhone)) {
+                return true; // 手机号
+            } else if (cleanPhone.length >= 7 && cleanPhone.length <= 12) {
+                return true; // 固话或其他号码
+            } else if (cleanPhone.length >= 3 && cleanPhone.length <= 6) {
+                return true; // 短号码
+            }
+            
+            return false;
+        }
+
+        // 格式化电话显示
+        function formatPhoneDisplay(phone) {
+            if (!phone) return '';
+            
+            const cleanPhone = phone.replace(/\D/g, '');
+            
+            // 11位手机号格式化
+            if (cleanPhone.length === 11) {
+                return cleanPhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+            }
+            // 10位400电话
+            else if (cleanPhone.length === 10 && cleanPhone.startsWith('400')) {
+                return cleanPhone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            }
+            // 其他格式保持原样或简单分组
+            else if (cleanPhone.length >= 7) {
+                return cleanPhone.replace(/(\d{3,4})(\d{4})/, '$1-$2');
+            }
+            
+            return cleanPhone;
+        }
+
+        // 显示消息
+        function showMessage(message, type = 'info') {
+            const messageArea = document.getElementById('messageArea');
+            const messageDiv = document.createElement('div');
+            
+            let className = 'visitor-info';
+            if (type === 'error') className = 'error-info';
+            if (type === 'success') className = 'success-info';
+            
+            messageDiv.className = className;
+            messageDiv.innerHTML = message;
+            
+            messageArea.innerHTML = '';
+            messageArea.appendChild(messageDiv);
+            
+            // 3秒后自动隐藏非错误消息
+            if (type !== 'error') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
             }
         }
-        
-        // 拨号处理
-        document.getElementById('call-btn').addEventListener('click', function(e) {
-            // 阻止默认行为（立即跳转拨号）
-            e.preventDefault();
+
+        // 初始化页面
+        function initPage() {
+            const params = getUrlParams();
             
-            // 显示确认对话框
-            const dialog = document.getElementById('confirm-dialog');
-            dialog.style.display = 'flex';
-            setTimeout(() => {
-                dialog.style.opacity = '1';
-                document.querySelector('.confirm-dialog').style.transform = 'translateY(0)';
-            }, 10);
-        });
-        
-        // 确认拨打
-        document.getElementById('confirm-call').addEventListener('click', function() {
-            // 实际拨号操作
-            window.location.href = 'tel:4008888888';
-        });
-        
-        // 取消拨打
-        document.getElementById('cancel-call').addEventListener('click', function() {
-            const dialog = document.getElementById('confirm-dialog');
-            dialog.style.opacity = '0';
-            document.querySelector('.confirm-dialog').style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                dialog.style.display = 'none';
-            }, 300);
-        });
-        
-        // 初始化气泡效果
-        createBubbles();
+            // 选择预设配置
+            if (params.type && currentConfig.profiles[params.type]) {
+                Object.assign(currentConfig, currentConfig.profiles[params.type]);
+            }
+            
+            // 处理电话号码参数
+            if (params.phone) {
+                if (validatePhone(params.phone)) {
+                    currentConfig.phone = params.phone.replace(/\D/g, ''); // 保存纯数字
+                    currentConfig.phoneDisplay = formatPhoneDisplay(params.phone);
+                    
+                    showMessage(`📞 已获取联系电话：${currentConfig.phoneDisplay}`, 'success');
+                    document.getElementById('phoneButtonText').textContent = '拨打电话';
+                } else {
+                    showMessage('❌ 电话号码格式不正确，请检查URL参数', 'error');
+                    document.getElementById('phoneButtonText').textContent = '电话号码无效';
+                    document.getElementById('phoneBtn').disabled = true;
+                }
+            } else {
+                showMessage('⚠️ 未检测到电话号码参数，请在URL中添加 ?phone=号码', 'error');
+                document.getElementById('phoneButtonText').textContent = '缺少电话号码';
+                document.getElementById('phoneBtn').disabled = true;
+            }
+            
+            // 其他参数覆盖
+            if (params.name) currentConfig.name = decodeURIComponent(params.name);
+            if (params.wechat) currentConfig.wechat = params.wechat;
+            
+            // 更新页面显示
+            updatePageContent();
+            
+            // 显示访问信息
+            showVisitInfo(params);
+            
+            // 绑定事件
+            bindEvents();
+            
+            // 记录访问
+            logVisit(params);
+        }
+
+        // 更新页面内容
+        function updatePageContent() {
+            document.getElementById('name').textContent = currentConfig.name;
+            document.getElementById('role').textContent = currentConfig.role;
+            document.getElementById('avatar').textContent = currentConfig.avatar;
+            document.getElementById('phoneNumber').textContent = currentConfig.phoneDisplay || '号码无效';
+            document.getElementById('wechatId').textContent = `微信号：${currentConfig.wechat}`;
+            document.getElementById('serviceTime').textContent = currentConfig.serviceTime;
+        }
+
+        // 显示访问信息
+        function showVisitInfo(params) {
+            const visitInfo = [];
+            
+            if (params.from) visitInfo.push(`来源：${decodeURIComponent(params.from)}`);
+            if (params.source) visitInfo.push(`渠道：${decodeURIComponent(params.source)}`);
+            if (params.campaign) visitInfo.push(`活动：${decodeURIComponent(params.campaign)}`);
+            
+            if (visitInfo.length > 0) {
+                setTimeout(() => {
+                    showMessage(`👋 欢迎访问！${visitInfo.join(' | ')}`, 'info');
+                }, 1500);
+            }
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 电话按钮点击
+            document.getElementById('phoneBtn').addEventListener('click', function() {
+                if (!currentConfig.phone) {
+                    showMessage('❌ 电话号码无效，无法拨打', 'error');
+                    return;
+                }
+                
+                const phoneDisplay = document.getElementById('phoneDisplay');
+                
+                if (phoneDisplay.classList.contains('show')) {
+                    // 如果已显示，直接拨打
+                    makeCall();
+                } else {
+                    // 显示电话号码
+                    phoneDisplay.classList.add('show');
+                    document.getElementById('wechatInfo').classList.remove('show');
+                    
+                    showMessage('📱 点击"立即拨打"按钮拨打电话', 'info');
+                }
+            });
+
+            // 微信按钮点击
+            document.getElementById('wechatBtn').addEventListener('click', function() {
+                const wechatInfo = document.getElementById('wechatInfo');
+                wechatInfo.classList.toggle('show');
+                document.getElementById('phoneDisplay').classList.remove('show');
+                
+                if (wechatInfo.classList.contains('show')) {
+                    showMessage('💬 请复制微信号添加好友', 'info');
+                }
+            });
+
+            // 拨打电话
+            document.getElementById('callDirect').addEventListener('click', makeCall);
+
+            // 复制微信号
+            document.getElementById('copyWechat').addEventListener('click', function() {
+                copyToClipboard(currentConfig.wechat);
+                this.textContent = '已复制！';
+                showMessage('✅ 微信号已复制到剪贴板', 'success');
+                
+                setTimeout(() => {
+                    this.textContent = '复制微信号';
+                }, 2000);
+                
+                logAction('copy_wechat', currentConfig.wechat);
+            });
+        }
+
+        // 拨打电话
+        function makeCall() {
+            if (!currentConfig.phone) {
+                showMessage('❌ 电话号码无效', 'error');
+                return;
+            }
+            
+            const telUrl = `tel:${currentConfig.phone}`;
+            
+            // 显示拨打提示
+            showMessage(`📞 正在拨打：${currentConfig.phoneDisplay}`, 'success');
+            
+            // 尝试拨打电话
+            try {
+                window.location.href = telUrl;
+                logAction('call_attempt', currentConfig.phone);
+            } catch (error) {
+                showMessage('❌ 拨打失败，请手动拨打电话', 'error');
+                console.error('拨打电话失败:', error);
+            }
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text);
+            } else {
+                // 兼容旧浏览器
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'absolute';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // 记录访问
+        function logVisit(params) {
+            const visitData = {
+                timestamp: new Date().toISOString(),
+                url: window.location.href,
+                phone: params.phone,
+                params: params,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer
+            };
+            
+            console.log('📊 访问记录:', visitData);
+        }
+
+        // 记录行为
+        function logAction(action, value) {
+            const actionData = {
+                action: action,
+                value: value,
+                phone: currentConfig.phone,
+                timestamp: new Date().toISOString(),
+                url: window.location.href
+            };
+            
+            console.log('📊 行为记录:', actionData);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initPage);
     </script>
 </body>
 </html>
